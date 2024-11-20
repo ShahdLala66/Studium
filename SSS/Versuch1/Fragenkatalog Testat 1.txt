@@ -1,0 +1,75 @@
+Fragenkatalog Testat 1
+======================
+
+
+1. Welche elektrische Größe misst ein Drehspul-Messwerk?
+Strom (Ampere A)
+
+2. Wie funktioniert ein Drehspulinstrument?
+Beim Stromfluss verhält sich die Spule wie ein Magnet, der angezogen oder abgestoßen wird. Ein stärkerer Stromfluss erzeugt ein stärkeres Magnetfeld und somit eine höhere Anziehungs- oder Abstoßungskraft. Die drehbar gelagerte Spule wird von einer Spiralfeder als Gegenkraft zurückgehalten, was zu einem Gleichgewichtszustand zwischen der magnetischen und der Rückstellkraft führt.
+
+3. Eine indirekte Messgröße A berechnet sich als Differenz zweier direkt gemessener 
+Eingangsgrößen B und C mit absolutem Messfehler ΔB bzw. ΔC, d.h. A = B - C. Wie groß 
+schätzen Sie den absoluten Messfehler ΔA?
+ΔA=ΔB-ΔC
+
+4. Sie haben eine indirekt gemessene Größe A, die von mehreren Eingangsgrößen B, C, D, ... 
+abhängt, die alle den gleichen Messfehler haben. Welche der Eingangsgrößen hat den größten 
+Einfluss auf den Messfehler von A?
+Die Eingangsgröße mit dem größten Einfluss auf den Messfehler von A ist diejenige, für die die partielle Ableitung von A am größten ist.
+
+5. Was leistet die lineare Regression?
+Alternative Methode zur Bestimmung der Übertragungsfunktion. Basiert auf der Annahme, dass die Übertragungsfunktion linear ist. Das Ziel besteht darin, eine Ausgleichsgerade zu finden, die die Abstände zwischen allen Messpunkten und der Geraden minimiert.
+
+6. Kann man die lineare Regression auch bei Kennlinien anwenden, die einem Gesetz der Form
+y = x ^ a folgen?
+Ja, durch die doppelte Logarithmierung
+
+7. Sie haben in Python eine 5 x 5 - Matrix a angelegt. Wie greifen Sie auf das zweite 
+Element der dritten Zeile zu?
+a[2][1]
+
+8. Ein Messintrument hat einen Anzeigefehler von 1% und einen Skalenendwert von 5 A. Im 
+Moment zeigt das Instrument einen Strom von 2 A an. In welchem Bereich liegt der wahre 
+Wert des Stroms?
+2A +-0,05A, also zwischen 1,95 und 2,05A
+
+9. Auf der Anzeige Ihres analogen Messinstrumentes steht "KL 1.5". Was bedeutet das?
+Die Angabe "KL 1.5" auf einem analogen Messinstrument bezieht sich auf die Fehlerklasse des Geräts. Sie zeigt an, dass es sich um ein Betriebsmessgerät handelt, das einen Anzeigefehler von 1,5 % auf den Skalenendwert hat. Dies bedeutet, dass die maximale Abweichung des gemessenen Wertes von dem tatsächlichen Wert bis zu 1,5 % des maximalen Skalenwerts betragen kann.
+
+10. Wie schätzt man den wahren Wert einer Messgröße, wenn mehrere fehlerbehaftete 
+Messungen vorliegen?
+Man schätzt den wahren Wert einer Messgröße als das arithmetische Mittel aller einzelnen Messungen.
+
+11. Sie haben 20 Einzelmessungen mit einer Standardabweichung des Mittelwertes von s. Wie
+groß ist das Vertrauensintervall, in das der wahre Wert der Messgröße mit einer 
+Wahrscheinlichkeit von 95,5 % fällt?
++-sx gibt einen Vertrauensbereich an in den 68% der arithmetischen Mittelwerte fallen. +-2sx gibt den 95% Bereich an sofern keine systematischhen Fehler vorliegen (x(mittel) - x(wahr)). Wenn wenige Messwerte vorliegen (z.B. n= 30), besteht die Gefahr einer Unterschätzung des Fehlers, da die Schätzung von sx selbst fehlerbehaftet ist. Man korrigiert daher die Fehlerschätzung um einen t nach oben, der von der Anzahl der Messungen und der gewünschten Sicherheit abhängt. (x = x(mittel)) +- t * sx
+
+12. Warum muss man jede Messung mit dem größten Messbereich beginnen?
+Spule verträgt nicht viel Strom und kann daher von zu großen Strömen zerstört werden.
+
+13. Warum kann ein Drehspulinstrument nicht beliebig schnell veränderliche Ströme oder 
+Spannungen anzeigen?
+Jede Zeigerstellung ist ein Gleichgewichtszustand zw. Magnet und Rückstellkraft, deswegen braucht das Gerät eine gewisse Einschwingzeit pro gemessene Größe.
+
+14. Was ist der Parallaxenfehler?
+Je nach Blickwinkel auf den Zeiger liest man einen leicht unterschiedlichen Wert ab.
+
+15. Welches Messprinzip liegt dem im Praktikum eingesetzten Abstandssensor zugrunde?
+Triangulationsprinzip
+
+16. Zu was benützt man ein Oszilloskop?
+Um Signale und Schwingungen zu visualisieren => im Zeitbereich. Mit dem Oszilloskop können zeitabhängige (und insbesondere schnellveränderliche) Größen gemessen werden.
+
+17. Wie funktioniert ein analoges Oszilloskop?
+Ein analoges Oszilloskop verwendet eine Kathodenstrahlröhre, um elektrische Signale in eine visuelle Wellenform umzuwandeln. Es verstärkt die Signale, lenkt den Elektronenstrahl sowohl vertikal als auch horizontal ab und zeigt die Ergebnisse auf einem Bildschirm an, wodurch die Analyse und Messung elektrischer Signale in Echtzeit ermöglicht wird.
+
+18. Was ist der Unterschied zwischen einem Sensor und einem Messgerät?
+Sensoren erfassen physikalische Größen und wandeln sie in Signale um. Messgeräte hingegen verarbeiten, zeigen und analysieren diese Signale.
+
+19. Was für ein Sensortyp ist der im Praktikum eingesetzte Abstandssensor?
+Infrarot-Entfernungssensor
+
+20. Wie funktioniert die Triggerung beim Oszilloskop?
+Triggern beim Oszilloskop ist der Prozess der Synchronisation und Stabilisierung eines sich wiederholenden Signals auf dem Bildschirm. Dabei wird ein definierter Spannungswert oder ein Ereignis als Triggerpunkt verwendet, ab dem die Messung beginnt und das Signal auf dem Display angezeigt wird.

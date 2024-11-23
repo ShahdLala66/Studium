@@ -1,7 +1,7 @@
 // O. Bittel;
 // 30.7.2024
 
-package directedGraph;
+package Aufgabe2.aufgabe2.graph;
 
 import java.util.*;
 

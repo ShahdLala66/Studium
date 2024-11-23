@@ -1,6 +1,6 @@
 // O. Bittel;
 // 22.02.2017
-package directedGraph;
+package Aufgabe2.aufgabe2.graph;
 
 import java.util.Collections;
 import java.util.LinkedList;

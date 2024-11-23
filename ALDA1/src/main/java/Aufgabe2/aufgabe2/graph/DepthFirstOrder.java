@@ -25,12 +25,13 @@ public class DepthFirstOrder<V> {
      */
     public DepthFirstOrder(DirectedGraph<V> g) {
         myGraph = g;
+        // besuchte Knoten speichern
         Set<V> visited = new HashSet<>();
 
-        for (V vertex : g.getVertexSet()) {
-            if (!visited.contains(vertex)) {
+        for (V v : g.getVertexSet()) {
+            if (!visited.contains(v)) {
+                visitDF(v, visited);
                 numberOfDFTrees++;
-                visitDF(vertex, visited);
             }
         }
     }
@@ -48,15 +49,6 @@ public class DepthFirstOrder<V> {
         postOrder.add(v); // Post-Order: Beim Verlassen des Knotens
     }
 
-  /*  void visitAllNodes(){
-        Set<V> visited = new HashSet<>();
-        for (V vertex : myGraph.getVertexSet()) {
-            if (!visited.contains(vertex)) {
-                numberOfDFTrees++;
-                visitDF(vertex, visited);
-            }
-        }
-    } */
 
     /**
      * Liefert eine nicht modifizierbare Liste (unmodifiable view) mit einer

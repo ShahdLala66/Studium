@@ -1,7 +1,7 @@
 // O. Bittel;
 // 19.03.2018
 
-package Aufgabe2.aufgabe2.graph;
+package main.java.Aufgabe2.aufgabe2.graph;
 
 import java.util.Collections;
 import java.util.Map;

@@ -1,7 +1,7 @@
 // O. Bittel;
 // 30.07.2024
 
-package Aufgabe2.aufgabe2.graph;
+package main.java.Aufgabe2.aufgabe2.graph;
 
 import java.security.cert.CollectionCertStoreParameters;
 import java.util.Collections;

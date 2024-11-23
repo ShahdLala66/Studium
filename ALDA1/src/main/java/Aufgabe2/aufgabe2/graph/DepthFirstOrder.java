@@ -1,10 +1,8 @@
 // O. Bittel;
 // 22.02.2017
-package Aufgabe2.aufgabe2.graph;
+package main.java.Aufgabe2.aufgabe2.graph;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Klasse für Tiefensuche.
@@ -19,7 +17,6 @@ public class DepthFirstOrder<V> {
     private final List<V> postOrder = new LinkedList<>();
     private final DirectedGraph<V> myGraph;
     private int numberOfDFTrees = 0;
-	// ...
 
     /**
      * Führt eine Tiefensuche für g durch.
@@ -28,8 +25,38 @@ public class DepthFirstOrder<V> {
      */
     public DepthFirstOrder(DirectedGraph<V> g) {
         myGraph = g;
-        // ...
+        Set<V> visited = new HashSet<>();
+
+        for (V vertex : g.getVertexSet()) {
+            if (!visited.contains(vertex)) {
+                numberOfDFTrees++;
+                visitDF(vertex, visited);
+            }
+        }
     }
+
+    private void visitDF(V v, Set<V> visited) {
+        visited.add(v);
+        preOrder.add(v); // Pre-Order: Beim ersten Betreten des Knotens
+
+        for (V w : myGraph.getSuccessorVertexSet(v)) {
+            if (!visited.contains(w)) {
+                visitDF(w, visited);
+            }
+        }
+
+        postOrder.add(v); // Post-Order: Beim Verlassen des Knotens
+    }
+
+  /*  void visitAllNodes(){
+        Set<V> visited = new HashSet<>();
+        for (V vertex : myGraph.getVertexSet()) {
+            if (!visited.contains(vertex)) {
+                numberOfDFTrees++;
+                visitDF(vertex, visited);
+            }
+        }
+    } */
 
     /**
      * Liefert eine nicht modifizierbare Liste (unmodifiable view) mit einer

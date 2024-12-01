@@ -1,7 +1,7 @@
 // O. Bittel;
 // 22.02.2017
 
-package Aufgabe2.aufgabe2.graph;
+package main.java.Aufgabe2.aufgabe2.graph;
 
 import java.io.File;
 import java.io.FileNotFoundException;

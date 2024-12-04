@@ -14,7 +14,6 @@ import java.util.*;
 public class DirectedCycle<V> {
 	private final List<V> cycle = new LinkedList<>(); // a cycle, if present
 
-
     /**
 	 * Führt eine Tiefensuche für g durch und prüft dabei auf Zyklen.
 	 * Falls ein Zyklus erkannt wird, wird die Suche abgebrochen.
@@ -30,7 +29,6 @@ public class DirectedCycle<V> {
 			}
 		}
 	}
-
 
 	private void searchDirectedCycle(V v, DirectedGraph<V> g, Set<V> visited, LinkedHashSet<V> path) {
 		visited.add(v);

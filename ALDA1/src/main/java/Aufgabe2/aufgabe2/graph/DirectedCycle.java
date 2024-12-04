@@ -15,8 +15,7 @@ public class DirectedCycle<V> {
 	private final List<V> cycle = new LinkedList<>(); // a cycle, if present
 	private final DirectedGraph<V> myGraph;
 	private final Set<V> visited = new HashSet<>();
-	private final Deque<V> path = new ArrayDeque<>();
-	private final Set<V> nodeInPath = new HashSet<>();
+	private final LinkedHashSet<V> path = new LinkedHashSet<>(); // ersetzt path + nodeInPath
 
 	/**
 	 * Führt eine Tiefensuche für g durch und prüft dabei auf Zyklen.
@@ -37,8 +36,7 @@ public class DirectedCycle<V> {
 
 	private void searchDirectedCycle(V v) {
 		visited.add(v);
-		path.push(v);
-		nodeInPath.add(v);
+		path.add(v); // Knoten zum aktuellen Pfad hinzufügen
 
 		for (V w : myGraph.getSuccessorVertexSet(v)) {
 			if (!visited.contains(w)) {
@@ -46,21 +44,23 @@ public class DirectedCycle<V> {
 				if (!cycle.isEmpty()) {
 					return;
 				}
-			} else if (nodeInPath.contains(w)) {
+			} else if (path.contains(w)) { // Rückwärtskante erkannt
+				// Zyklus rekonstruieren
+				boolean collecting = false;
 				for (V node : path) {
-					cycle.add(node);
 					if (node.equals(w)) {
-						break;
+						collecting = true;
+					}
+					if (collecting) {
+						cycle.add(node);
 					}
 				}
-				cycle.add(w);
-				Collections.reverse(cycle);
+				cycle.add(w); // Endknoten hinzufügen
 				return;
 			}
 		}
 
-		path.pop();
-		nodeInPath.remove(v);
+		path.remove(v); // Knoten aus dem Pfad entfernen, da Suche abgeschlossen
 	}
 
 	

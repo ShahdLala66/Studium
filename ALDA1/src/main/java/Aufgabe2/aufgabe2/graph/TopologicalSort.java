@@ -3,13 +3,9 @@
 
 package main.java.Aufgabe2.aufgabe2.graph;
 
-import java.security.cert.CollectionCertStoreParameters;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Queue;
 
 /**
  * Klasse zur Erstellung einer topologischen Sortierung.
@@ -25,7 +21,17 @@ public class TopologicalSort<V> {
 	 * @param g gerichteter Graph.
 	 */
 	public TopologicalSort(DirectedGraph<V> g) {
-        // ...
+		DirectedCycle<V> cycleCheck = new DirectedCycle<>(g);
+		if (cycleCheck.hasCycle()) {
+			System.out.println("Der Graph enthält einen Zyklus: " + cycleCheck.getCycle());
+		} else {
+			DepthFirstOrder<V> dfo = new DepthFirstOrder<>(g);
+			List<V> postOrderList = dfo.postOrder();
+			if (!postOrderList.isEmpty()) {
+				ts = new LinkedList<>(postOrderList); // Create a modifiable copy
+				Collections.reverse(ts);
+			}
+		}
     }
     
 	/**
@@ -83,6 +89,15 @@ public class TopologicalSort<V> {
 		if (ts.topologicalSortedList() != null) {
 			System.out.println("Topologische Sortierung:");
 			System.out.println(ts.topologicalSortedList());
+		}
+
+		anziehGraph.addEdge("Schal", "Hose");
+
+		TopologicalSort<String> ts2 = new TopologicalSort<>(anziehGraph);
+
+		if (ts.topologicalSortedList() != null) {
+			System.out.println("Topologische Sortierung:");
+			System.out.println(ts2.topologicalSortedList());
 		}
 	}
 }

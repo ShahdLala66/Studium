@@ -1,6 +1,6 @@
 // O. Bittel;
 // 22.02.2017
-package directedGraph;
+package Aufgabe2.aufgabe2.graph;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -9,17 +9,17 @@ import java.util.List;
 /**
  * Klasse für Tiefensuche.
  *
+ * @param <V> Knotentyp.
  * @author Oliver Bittel
  * @since 22.02.2017
- * @param <V> Knotentyp.
  */
 public class DepthFirstOrder<V> {
 
-    private final List<V> preOrder = new LinkedList<>();
-    private final List<V> postOrder = new LinkedList<>();
+    private List<V> preOrder = new LinkedList<>();
+    private List<V> postOrder = new LinkedList<>();
     private final DirectedGraph<V> myGraph;
     private int numberOfDFTrees = 0;
-	// ...
+    // ...
 
     /**
      * Führt eine Tiefensuche für g durch.
@@ -28,7 +28,26 @@ public class DepthFirstOrder<V> {
      */
     public DepthFirstOrder(DirectedGraph<V> g) {
         myGraph = g;
-        // ...
+        preOrder = new LinkedList<>();
+        postOrder = new LinkedList<>();
+        numberOfDFTrees = 0;
+
+        for (V v : g.getVertexSet()) {
+            if (!preOrder.contains(v)) {
+                visted(v);
+                numberOfDFTrees++;
+            }
+        }
+    }
+
+    private void visted(V v) {
+        preOrder.add(v); //kann man mit visited ersetzen
+        for (V w : myGraph.getSuccessorVertexSet(v)) {
+            if (!preOrder.contains(w)) {
+                visted(w);
+            }
+        }
+        postOrder.add(v);
     }
 
     /**
@@ -52,7 +71,6 @@ public class DepthFirstOrder<V> {
     }
 
     /**
-     *
      * @return Anzahl der Bäume des Tiefensuchwalds.
      */
     public int numberOfDFTrees() {
@@ -72,8 +90,8 @@ public class DepthFirstOrder<V> {
         g.addEdge(7, 4);
 
         DepthFirstOrder<Integer> dfs = new DepthFirstOrder<>(g);
-        System.out.println(dfs.numberOfDFTrees());	// 2
-        System.out.println(dfs.preOrder());		// [1, 2, 5, 6, 3, 7, 4]
-        System.out.println(dfs.postOrder());		// [5, 6, 2, 1, 4, 7, 3]
+        System.out.println(dfs.numberOfDFTrees());    // 2
+        System.out.println(dfs.preOrder());        // [1, 2, 5, 6, 3, 7, 4]
+        System.out.println(dfs.postOrder());        // [5, 6, 2, 1, 4, 7, 3]
     }
 }

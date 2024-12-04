@@ -13,55 +13,53 @@ import java.util.*;
  */
 public class DirectedCycle<V> {
 	private final List<V> cycle = new LinkedList<>(); // a cycle, if present
-	private final DirectedGraph<V> myGraph;
-	private final Set<V> visited = new HashSet<>();
-	private final LinkedHashSet<V> path = new LinkedHashSet<>(); // ersetzt path + nodeInPath
 
-	/**
+
+    /**
 	 * Führt eine Tiefensuche für g durch und prüft dabei auf Zyklen.
 	 * Falls ein Zyklus erkannt wird, wird die Suche abgebrochen.
 	 * @param g gerichteter Graph.
 	 */
 	public DirectedCycle(DirectedGraph<V> g) {
-		myGraph = g;
+        Set<V> visited = new HashSet<>();
+		LinkedHashSet<V> path = new LinkedHashSet<>();
+
 		for (V v : g.getVertexSet()) {
 			if (!visited.contains(v)) {
-				searchDirectedCycle(v);
-				if (!cycle.isEmpty()) {
-					break;
-				}
+				searchDirectedCycle(v, g, visited, path);
 			}
 		}
 	}
 
-	private void searchDirectedCycle(V v) {
-		visited.add(v);
-		path.add(v); // Knoten zum aktuellen Pfad hinzufügen
 
-		for (V w : myGraph.getSuccessorVertexSet(v)) {
-			if (!visited.contains(w)) {
-				searchDirectedCycle(w);
-				if (!cycle.isEmpty()) {
-					return;
-				}
-			} else if (path.contains(w)) { // Rückwärtskante erkannt
-				// Zyklus rekonstruieren
-				boolean collecting = false;
+	private void searchDirectedCycle(V v, DirectedGraph<V> g, Set<V> visited, LinkedHashSet<V> path) {
+		visited.add(v);
+		path.add(v);
+
+		for (V w : g.getSuccessorVertexSet(v)) {
+			if (hasCycle()) {
+				return;
+			} else if (!visited.contains(w)) {
+				searchDirectedCycle(w, g, visited, path);
+			} else if (path.contains(w)) {
+				// Construct the cycle using LinkedHashSet
+				boolean isCycleStart = false;
 				for (V node : path) {
 					if (node.equals(w)) {
-						collecting = true;
+						isCycleStart = true;
 					}
-					if (collecting) {
+					if (isCycleStart) {
 						cycle.add(node);
 					}
 				}
-				cycle.add(w); // Endknoten hinzufügen
+				cycle.add(w); // Close the cycle
 				return;
 			}
 		}
 
-		path.remove(v); // Knoten aus dem Pfad entfernen, da Suche abgeschlossen
+		path.remove(v);
 	}
+
 
 	
 	/**

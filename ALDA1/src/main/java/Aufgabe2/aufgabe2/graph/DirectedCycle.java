@@ -9,40 +9,42 @@ public class DirectedCycle<V> {
 	public DirectedCycle(DirectedGraph<V> g) {
 		myGraph = g;
 		Set<V> visited = new HashSet<>();
-		Stack<V> path = new Stack<>();
-		Set<V> nodeInPath = new HashSet<>();
+		LinkedHashSet<V> path = new LinkedHashSet<>();
 
 		for (V v : g.getVertexSet()) {
 			if (!visited.contains(v)) {
-				searchDirectedCycle(v, g, visited, path, nodeInPath);
+				searchDirectedCycle(v, g, visited, path);
 			}
 		}
 	}
 
-	private void searchDirectedCycle(V v, DirectedGraph<V> g, Set<V> visited, Stack<V> path, Set<V> nodeInPath) {
+	private void searchDirectedCycle(V v, DirectedGraph<V> g, Set<V> visited, LinkedHashSet<V> path) {
 		visited.add(v);
-		path.push(v);
-		nodeInPath.add(v);
+		path.add(v);
 
 		for (V w : g.getSuccessorVertexSet(v)) {
 			if (hasCycle()) {
 				return;
 			} else if (!visited.contains(w)) {
-				searchDirectedCycle(w, g, visited, path, nodeInPath);
-			} else if (nodeInPath.contains(w)) {
-				// Construct the cycle using the stack
-				while (!path.isEmpty() && !path.peek().equals(w)) {
-					cycle.add(path.pop());
+				searchDirectedCycle(w, g, visited, path);
+			} else if (path.contains(w)) {
+				System.out.println("Cycle detected");
+				// Construct the cycle using LinkedHashSet
+				boolean isCycleStart = false;
+				for (V node : path) {
+					if (node.equals(w)) {
+						isCycleStart = true;
+					}
+					if (isCycleStart) {
+						cycle.add(node);
+					}
 				}
-				cycle.add(w); // Add the detected node (start of cycle)
-				Collections.reverse(cycle); // Reverse the cycle
-				cycle.add(w); // Add the start node again to close the loop
+				cycle.add(w); // Close the cycle
 				return;
 			}
 		}
 
-		path.pop();
-		nodeInPath.remove(v);
+		path.remove(v);
 	}
 
 	public List<V> getCycle() {

@@ -28,6 +28,7 @@ public class AdjacencyListDirectedGraph<V extends Comparable<V>> implements Dire
 
 	private int numberEdge = 0;
 
+	// Fügt Knoten hinzu falls noch nicht vorhanden
 	@Override
 	public boolean addVertex(V v) {
 		if (!containsVertex(v)) {
@@ -38,6 +39,7 @@ public class AdjacencyListDirectedGraph<V extends Comparable<V>> implements Dire
 		return false;
 	}
 
+	// Fügt eine Kante hinzu falls noch nicht vorhanden mit Gewicht, falls v und w nicht vorhanden sind, werden sie hinzugefügt
 	@Override
 	public boolean addEdge(V v, V w, double weight) {
 		if (containsVertex(v) && containsVertex(w)) {
@@ -52,16 +54,19 @@ public class AdjacencyListDirectedGraph<V extends Comparable<V>> implements Dire
 		}
 	}
 
+	// Kante mit Standardgewicht 1.0 entspricht Kante ohne Gewicht
 	@Override
 	public boolean addEdge(V v, V w) {
 		return addEdge(v, w, 1.0);
 	}
 
+	// Existiert der Knoten v
 	@Override
 	public boolean containsVertex(V v) {
 		return succ.containsKey(v);             // oder: pred
 	}
 
+	//Existiert die Kante v -> w
 	@Override
 	public boolean containsEdge(V v, V w) {
 		return succ.containsKey(v) && succ.get(v).containsKey(w);
@@ -76,6 +81,7 @@ public class AdjacencyListDirectedGraph<V extends Comparable<V>> implements Dire
 	}
 
 
+	// Anzahl eingehende Kanten
 	@Override
 	public int getInDegree(V v) {
 		if (containsVertex(v)) {
@@ -84,6 +90,7 @@ public class AdjacencyListDirectedGraph<V extends Comparable<V>> implements Dire
 		return 0;
 	}
 
+	// Anzahl ausgehende Kanten
 	@Override
 	public int getOutDegree(V v) {
 		if(containsVertex(v)){
@@ -123,11 +130,14 @@ public class AdjacencyListDirectedGraph<V extends Comparable<V>> implements Dire
 		return numberEdge;
 	}
 
+	// Alle Kanten umkehren
 	@Override
 	public DirectedGraph<V> invert() {
+		// für inverted Graphen
 		DirectedGraph<V> d = new AdjacencyListDirectedGraph<>();
 		for (V v : getVertexSet()) {
 			for (V w : getSuccessorVertexSet(v)) {
+				// reversed edge
 				d.addEdge(w, v, getWeight(v, w));
 			}
 		}

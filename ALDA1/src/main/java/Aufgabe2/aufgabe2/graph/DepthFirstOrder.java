@@ -36,6 +36,7 @@ public class DepthFirstOrder<V> {
         }
     }
 
+    // rekursive Tiefensuche
     private void visitDF(V v, Set<V> visited) {
         visited.add(v);
         preOrder.add(v); // Pre-Order: Beim ersten Betreten des Knotens

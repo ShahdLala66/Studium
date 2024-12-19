@@ -25,6 +25,8 @@ public class TopologicalSort<V> {
 		if (cycleCheck.hasCycle()) {
 			System.out.println("Der Graph enthält einen Zyklus: " + cycleCheck.getCycle());
 		} else {
+			// wenn kein Zyklus, dann topologische Sortierung
+			// tiefensuche, dann postorder, dann umdrehen
 			DepthFirstOrder<V> dfo = new DepthFirstOrder<>(g);
 			List<V> postOrderList = dfo.postOrder();
 			if (!postOrderList.isEmpty()) {

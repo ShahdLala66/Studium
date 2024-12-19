@@ -67,8 +67,8 @@ public class AnalyzeWebSite {
      * @param g gerichteter Graph mit Web-Seiten als Knoten und Links als Kanten.
      */
     private static <V> void pageRank(DirectedGraph<V> g) {
-        int nI = 10;            //number of iterations
-        double alpha = 0.5;
+        int nI = 10;            // fixe Anzahl an Iterationen
+        double alpha = 0.5;     // Dämpfungsfaktor
 
         // Definiere und initialisiere rankTable:
         Map<V, Double> rankTable = new HashMap<>();
@@ -106,9 +106,9 @@ public class AnalyzeWebSite {
 
         // Rank Table ausgeben (nur für data/WebSiteKlein):
 
-        //for (Map.Entry<V, Double> entry : rankTable.entrySet()) {
-        //System.out.println("Seite: " + entry.getKey() + ", Rank: " + entry.getValue());
-        //}
+      /*  for (Map.Entry<V, Double> entry : rankTable.entrySet()) {
+        System.out.println("Seite: " + entry.getKey() + ", Rank: " + entry.getValue());
+        }>*/
 
         // Nach Ranks sortieren Top 100 ausgeben (nur für data/WebSiteGross):
 

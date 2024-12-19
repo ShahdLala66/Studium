@@ -29,6 +29,8 @@ public class StrongComponents<V> {
         DirectedGraph<V> gi = g.invert();
 
         for (V v : postOrder) {
+            // wenn knoten noch nicht besucht dann neue komponente
+            // und rekursiv alle knoten in komponente hinzufügen
             if (!visited.contains(v)) {
                 comp.put(numberOfComp, new HashSet<>());
                 comp.get(numberOfComp).add(v);
@@ -39,6 +41,7 @@ public class StrongComponents<V> {
         }
     }
 
+    // für rekursive Tiefensuche, fügt Knoten zur Komponente hinzu
     public void dfsR(DirectedGraph<V> g, V v, int numberOfComp) {
         for (V w : g.getSuccessorVertexSet(v)) {
             if (!visited.contains(w)) {
@@ -49,6 +52,7 @@ public class StrongComponents<V> {
         }
     }
 
+    // gibt die umgekehrte Postorder zurück
     private List<V> reversePostOrder(DirectedGraph<V> g) {
         DepthFirstOrder<V> dfo = new DepthFirstOrder<>(g);
         List<V> postOrderList = new LinkedList<>(dfo.postOrder());

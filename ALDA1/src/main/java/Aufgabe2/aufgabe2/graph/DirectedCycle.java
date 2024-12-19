@@ -12,7 +12,7 @@ import java.util.*;
  * @param <V> Knotentyp.
  */
 public class DirectedCycle<V> {
-	private final List<V> cycle = new LinkedList<>(); // a cycle, if present
+	private final List<V> cycle = new LinkedList<>(); // cycle
 
     /**
 	 * Führt eine Tiefensuche für g durch und prüft dabei auf Zyklen.
@@ -21,6 +21,7 @@ public class DirectedCycle<V> {
 	 */
 	public DirectedCycle(DirectedGraph<V> g) {
         Set<V> visited = new HashSet<>();
+		// statt stack und set für nodeinpath und path
 		LinkedHashSet<V> path = new LinkedHashSet<>();
 
 		for (V v : g.getVertexSet()) {
@@ -34,13 +35,16 @@ public class DirectedCycle<V> {
 		visited.add(v);
 		path.add(v);
 
+		// iterieren über alle knoten
 		for (V w : g.getSuccessorVertexSet(v)) {
+			// wenn zyklus gefunden, dann abbrechen
 			if (hasCycle()) {
 				return;
 			} else if (!visited.contains(w)) {
+				// wenn nicht besucht, dann rekursiv
 				searchDirectedCycle(w, g, visited, path);
 			} else if (path.contains(w)) {
-				// Construct the cycle using LinkedHashSet
+				// wenn besucht und im pfad, dann zyklus gefunden
 				boolean isCycleStart = false;
 				for (V node : path) {
 					if (node.equals(w)) {
@@ -50,7 +54,7 @@ public class DirectedCycle<V> {
 						cycle.add(node);
 					}
 				}
-				cycle.add(w); // Close the cycle
+				cycle.add(w);
 				return;
 			}
 		}

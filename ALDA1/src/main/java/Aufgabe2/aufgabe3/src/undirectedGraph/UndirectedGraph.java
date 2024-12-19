@@ -1,7 +1,7 @@
 // O. Bittel;
 // 14.12.2023
 
-package main.java.Aufgabe2.aufgabe3.src.undirectedGraph;
+package undirectedGraph;
 
 import java.util.Set;
 

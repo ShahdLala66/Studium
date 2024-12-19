@@ -1,7 +1,7 @@
 // O. Bittel;
 // 19.03.2018
 
-package main.java.Aufgabe2.aufgabe3.src.undirectedGraph;
+package undirectedGraph;
 
 import java.util.Collections;
 import java.util.Map;

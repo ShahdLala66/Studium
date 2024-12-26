@@ -1,7 +1,9 @@
 package shortestPath;
 
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 /**
  * Klasse für Scotland Yard Heuristik.
@@ -31,7 +33,15 @@ public class ScotlandYardHeuristic implements Heuristic<Integer> {
      */
     public ScotlandYardHeuristic() throws FileNotFoundException {
         // Lese Koordinaten von ScotlandYard_Knoten.txt in eine Map.
-        // ...
+        coord = new HashMap<>();
+        Scanner scanner = new Scanner("data/ScotlandYard_Knoten.txt");
+        while (scanner.hasNext()) {
+            int knoten = scanner.nextInt();
+            int x = scanner.nextInt();
+            int y = scanner.nextInt();
+            coord.put(knoten, new Point(x, y));
+        }
+        scanner.close();
     }
 
     /**
@@ -44,5 +54,6 @@ public class ScotlandYardHeuristic implements Heuristic<Integer> {
      */
     public double estimatedCost(Integer u, Integer v) {
         // ...
+        return 0.0;
     }
 }

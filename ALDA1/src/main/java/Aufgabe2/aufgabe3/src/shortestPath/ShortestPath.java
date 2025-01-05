@@ -24,13 +24,13 @@ import java.util.Map;
 public class ShortestPath<V> {
 
     SYSimulation sim = null;
+    Map<V, Double> dist;            // Distanz für jeden Knoten
+    Map<V, V> pred;                 // Vorgänger für jeden Knoten
+    IndexMinPQ<V, Double> cand;     // Kandidaten als PriorityQueue PQ
+    UndirectedGraph<V> graph;       // Der Graph
+    Heuristic<V> heur;              // Heuristik
+    private V targetNode;           // Zielknoten
 
-    Map<V, Double> dist;        // Distanz für jeden Knoten
-    Map<V, V> pred;                // Vorgänger für jeden Knoten
-    IndexMinPQ<V, Double> cand;    // Kandidaten als PriorityQueue PQ
-    // ...
-    UndirectedGraph<V> graph;   // Der Graph
-    Heuristic<V> heur;     // Heuristik
 
     /**
      * Konstruiert ein Objekt, das im Graph g kürzeste Wege
@@ -43,15 +43,15 @@ public class ShortestPath<V> {
      * @param h Heuristik. Falls h == null, werden kürzeste Wege nach
      *          dem Dijkstra-Verfahren gesucht.
      */
+
     public ShortestPath(UndirectedGraph<V> g, Heuristic<V> h) {
         dist = new HashMap<>();
         pred = new HashMap<>();
         cand = new IndexMinPQ<>();
-        // ...
         this.graph = g;
         this.heur = h;
-
     }
+
 
     /**
      * Diese Methode sollte nur verwendet werden,
@@ -66,9 +66,11 @@ public class ShortestPath<V> {
      *
      * @param sim SYSimulation-Objekt.
      */
+
     public void setSimulator(SYSimulation sim) {
         this.sim = sim;
     }
+
 
     /**
      * Sucht den kürzesten Weg von Starknoten s zum Zielknoten g.
@@ -79,7 +81,9 @@ public class ShortestPath<V> {
      * @param s Startknoten
      * @param g Zielknoten
      */
+
     public void searchShortestPath(V s, V g) {
+        targetNode = g; // Zielknoten speichern
         for (V v : graph.getVertexSet()) {
             dist.put(v, Double.POSITIVE_INFINITY);
             pred.put(v, null);
@@ -90,18 +94,16 @@ public class ShortestPath<V> {
 
         while (!cand.isEmpty()) {
             V v = cand.getMinKey(); // Knoten mit minimalem dist[v] + h(v, g)
+            cand.removeMin();
 
-            if (sim != null) {
-                sim.visitStation((Integer) v, java.awt.Color.blue);
-            }
+            System.out.println("Besuche Knoten: " + v + ", Distanz: " + dist.get(v));
 
             if (v.equals(g)) {
                 return; // Zielknoten erreicht
             }
 
             for (V w : graph.getNeighborSet(v)) {
-                double weight = graph.getWeight(v, w);
-                double newDist = dist.get(v) + weight;
+                double newDist = dist.get(v) + graph.getWeight(v, w);
 
                 if (dist.get(w) == Double.POSITIVE_INFINITY) {
                     // Knoten w noch nicht besucht
@@ -120,6 +122,7 @@ public class ShortestPath<V> {
         throw new IllegalArgumentException("Kein kürzester Weg gefunden!");
     }
 
+
     /**
      * Liefert einen kürzesten Weg von Startknoten s nach Zielknoten g.
      * Setzt eine erfolgreiche Suche von searchShortestPath(s,g) voraus.
@@ -127,23 +130,29 @@ public class ShortestPath<V> {
      * @return kürzester Weg als Liste von Knoten.
      * @throws IllegalArgumentException falls kein kürzester Weg berechnet wurde.
      */
+
     public List<V> getShortestPath() {
-        // ...
-
-        LinkedList<V> path = new LinkedList<>();
-        V current = pred.getOrDefault(null, null);
-
-        if (current == null) {
-            throw new IllegalArgumentException("Kein kürzester Weg berechnet.");
+        // Überprüfen, ob ein Zielknoten definiert und erreichbar ist
+        if (targetNode == null || !pred.containsKey(targetNode) || pred.get(targetNode) == null) {
+            throw new IllegalArgumentException("Kein kürzester Weg berechnet oder Zielknoten wurde nicht erreicht.");
         }
+
+        // Rückverfolgung vom Zielknoten zum Startknoten
+        LinkedList<V> path = new LinkedList<>();
+        V current = targetNode;
 
         while (current != null) {
-            path.addFirst(current);
-            current = pred.get(current);
+            path.addFirst(current); // Aktuellen Knoten am Anfang einfügen
+            current = pred.get(current); // Vorgänger des aktuellen Knotens abrufen
         }
 
+        // Sicherstellen, dass der Startknoten tatsächlich erreicht wurde
+        if (path.isEmpty() || !dist.containsKey(path.getFirst()) || dist.get(path.getFirst()) != 0.0) {
+            throw new IllegalArgumentException("Kein gültiger Pfad gefunden.");
+        }
         return path;
     }
+
 
     /**
      * Liefert die Länge eines kürzesten Weges von Startknoten s nach Zielknoten g zurück.
@@ -153,13 +162,10 @@ public class ShortestPath<V> {
      * @throws IllegalArgumentException falls kein kürzester Weg berechnet wurde.
      */
     public double getDistance() {
-        // ...
-
-        if (dist.isEmpty()) {
+        if (targetNode == null || !dist.containsKey(targetNode)) {
             throw new IllegalArgumentException("Kein kürzester Weg berechnet.");
         }
 
-        return dist.values().stream().mapToDouble(Double::doubleValue).sum();
+        return dist.get(targetNode); // Distanz des Zielknotens zurückgeben
     }
-
 }

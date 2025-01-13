@@ -96,7 +96,7 @@ public class ShortestPath<V> {
             V v = cand.getMinKey(); // Knoten mit minimalem dist[v] + h(v, g)
             cand.removeMin();
 
-            System.out.println("Besuche Knoten: " + v + ", Distanz: " + dist.get(v));
+            System.out.println("Besuche Knoten " + v + " mit d =  " + dist.get(v));
 
             if (v.equals(g)) {
                 return; // Zielknoten erreicht
@@ -132,21 +132,18 @@ public class ShortestPath<V> {
      */
 
     public List<V> getShortestPath() {
-        // Überprüfen, ob ein Zielknoten definiert und erreichbar ist
         if (targetNode == null || !pred.containsKey(targetNode) || pred.get(targetNode) == null) {
             throw new IllegalArgumentException("Kein kürzester Weg berechnet oder Zielknoten wurde nicht erreicht.");
         }
 
-        // Rückverfolgung vom Zielknoten zum Startknoten
         LinkedList<V> path = new LinkedList<>();
         V current = targetNode;
 
         while (current != null) {
-            path.addFirst(current); // Aktuellen Knoten am Anfang einfügen
-            current = pred.get(current); // Vorgänger des aktuellen Knotens abrufen
+            path.addFirst(current);
+            current = pred.get(current);
         }
 
-        // Sicherstellen, dass der Startknoten tatsächlich erreicht wurde
         if (path.isEmpty() || !dist.containsKey(path.getFirst()) || dist.get(path.getFirst()) != 0.0) {
             throw new IllegalArgumentException("Kein gültiger Pfad gefunden.");
         }

@@ -7,10 +7,9 @@ package shortestPath;
 import sim.SYSimulation;
 import undirectedGraph.UndirectedGraph;
 
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 // ...
 
@@ -83,6 +82,9 @@ public class ShortestPath<V> {
      */
 
     public void searchShortestPath(V s, V g) {
+        this.pred.clear();
+        this.dist.clear();
+        this.cand.clear();
         targetNode = g; // Zielknoten speichern
         for (V v : graph.getVertexSet()) {
             dist.put(v, Double.POSITIVE_INFINITY);
@@ -91,14 +93,18 @@ public class ShortestPath<V> {
         dist.put(s, 0.0);
 
         cand.add(s, 0.0 + (heur != null ? heur.estimatedCost(s, g) : 0.0));
+        this.targetNode = null;
 
         while (!cand.isEmpty()) {
             V v = cand.getMinKey(); // Knoten mit minimalem dist[v] + h(v, g)
             cand.removeMin();
+            if (sim != null) sim.visitStation((Integer) v, Color.BLUE);
+
 
             System.out.println("Besuche Knoten " + v + " mit d =  " + dist.get(v));
 
             if (v.equals(g)) {
+                this.targetNode = g;
                 return; // Zielknoten erreicht
             }
 
@@ -132,20 +138,12 @@ public class ShortestPath<V> {
      */
 
     public List<V> getShortestPath() {
-        if (targetNode == null || !pred.containsKey(targetNode) || pred.get(targetNode) == null) {
-            throw new IllegalArgumentException("Kein kürzester Weg berechnet oder Zielknoten wurde nicht erreicht.");
-        }
-
-        LinkedList<V> path = new LinkedList<>();
-        V current = targetNode;
-
-        while (current != null) {
-            path.addFirst(current);
-            current = pred.get(current);
-        }
-
-        if (path.isEmpty() || !dist.containsKey(path.getFirst()) || dist.get(path.getFirst()) != 0.0) {
-            throw new IllegalArgumentException("Kein gültiger Pfad gefunden.");
+        if (targetNode == null) throw new IllegalArgumentException();
+        List<V> path = new ArrayList<>();
+        V v = targetNode;
+        while (v != null) {
+            path.addFirst(v);
+            v = pred.get(v);
         }
         return path;
     }

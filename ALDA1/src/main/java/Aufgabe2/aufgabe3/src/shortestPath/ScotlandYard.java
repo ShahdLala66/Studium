@@ -7,9 +7,7 @@ import java.awt.Color;
 import java.io.IOException;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 
@@ -53,12 +51,12 @@ public class ScotlandYard {
 	 */
 	public static void main(String[] args) throws FileNotFoundException {
 		shortestPath(65, 157, 9.0);
-		//shortestPath(7, 190, 24.0);
-		//shortestPath(1, 17, 17.0);
-		//shortestPath(1, 175, 25.0);
-		//shortestPath(1, 173, 22.0);
+		shortestPath(7, 190, 24.0);
+		shortestPath(1, 17, 17.0);
+		shortestPath(1, 175, 25.0);
+		shortestPath(1, 173, 22.0);
 
-		//shortestPathWithSimulation(1, 173, 22.0);
+		shortestPathWithSimulation(1, 173, 22.0);
 	}
 
 	private static void shortestPath(Integer u, Integer v, Double dist) {
@@ -74,7 +72,7 @@ public class ScotlandYard {
 
 	private static void shortestPathWithSimulation(Integer u, Integer v, Double dist) {
 		sySpDijkstra.setSimulator(sim);
-		sim.startSequence("Shortest path (Dijkstra) from " + u + " to " + v);
+	//	sim.startSequence("Shortest path (Dijkstra) from " + u + " to " + v);
 		sySpDijkstra.searchShortestPath(u, v);
 		List<Integer> sp = sySpDijkstra.getShortestPath();
 		int a = -1;
@@ -133,7 +131,7 @@ public class ScotlandYard {
 			else if (s.equals("Bus"))
 				g = 3;
 			else
-				g = 5;
+				g = 5000;
 			
 			if (!sy_graph.containsEdge(u, v) || g < sy_graph.getWeight(u, v))
 				sy_graph.addEdge(u, v, g);

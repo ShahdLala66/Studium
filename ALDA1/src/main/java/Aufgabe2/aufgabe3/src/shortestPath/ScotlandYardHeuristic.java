@@ -1,7 +1,9 @@
 package shortestPath;
 
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -33,19 +35,17 @@ public class ScotlandYardHeuristic implements Heuristic<Integer> {
      * von der Datei ScotlandYard_Knoten.txt in eine Map ein.
      */
     public ScotlandYardHeuristic() throws FileNotFoundException {
-        // Initialize the coord map
         coord = new HashMap<>();
-
-        Scanner in = new Scanner(new File("data/ScotlandYard_Knoten.txt"));
-        String line;
-
-        while (in.hasNextLine()) {
-            line = in.nextLine();
-            String[] w = line.split("[\\t|\\s]+");
-
-            Point p = new Point(Integer.parseInt(w[1]), Integer.parseInt(w[2]));
-
-            coord.put(Integer.parseInt(w[0]), p);
+        try {
+            Files.readAllLines(Path.of("data/ScotlandYard_Knoten.txt")).forEach(line -> {
+                Scanner sc = new Scanner(line);
+                int v = sc.nextInt();
+                int x = sc.nextInt();
+                int y = sc.nextInt();
+                coord.put(v, new Point(x, y));
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

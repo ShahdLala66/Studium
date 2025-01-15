@@ -68,6 +68,6 @@ public class ScotlandYardHeuristic implements Heuristic<Integer> {
 
         double betrag = Math.sqrt((x * x) + (y * y));
 
-        return betrag / 30;
+        return betrag * 0.02;
     }
 }

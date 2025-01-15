@@ -76,11 +76,11 @@ public class TelNet {
     }
 
     public void drawOptTelNet(int xMax, int yMax, boolean drawGrid) {
-        StdDraw.setCanvasSize(512, 512);
+        StdDraw.setCanvasSize(2048, 1024);
         StdDraw.setXscale(0, xMax);
         StdDraw.setYscale(0, yMax);
 
-        if(drawGrid) {
+        if (drawGrid) {
             StdDraw.setPenColor(StdDraw.LIGHT_GRAY);
             for (int i = 0; i <= xMax; i++) {
                 StdDraw.line(i, 0, i, yMax);
@@ -125,33 +125,13 @@ public class TelNet {
     }
 
     private static void teilA() {
-        TelNet telNet = new TelNet(7);
-
-        telNet.addTelKnoten(1, 1);
-        telNet.addTelKnoten(3, 1);
-        telNet.addTelKnoten(4, 2);
-        telNet.addTelKnoten(3, 4);
-        telNet.addTelKnoten(2, 6);
-        telNet.addTelKnoten(4, 7);
-        telNet.addTelKnoten(7, 6);
-
-        boolean success = telNet.computeOptTelNet();
-
-        System.out.println("Netzwerk erfolgreich erstellt: " + success);
-        System.out.println("Anzahl der Knoten: " + telNet.size());
-        System.out.println("Gesamtkosten: " + telNet.getOptTelNetKosten());
-
-        System.out.println("\nVerbindungen im minimalen Spannbaum:");
-        for (TelVerbindung connection : telNet.getOptTelNet()) {
-            System.out.printf("(%d,%d) zu (%d,%d) mit Kosten %d%n",
-                    connection.anfang.x(), connection.anfang.y(),
-                    connection.ende.x(), connection.ende.y(),
-                    connection.c);
-        }
-
-        telNet.drawOptTelNet(7, 7, true);
+        StdDraw.setPenRadius(0.01);
+        StdDraw.line(0.25, 0, 0.75, 0); // Shifted right by 0.25
+        StdDraw.line(0.25, 0, 0.5, 0.5); // Shifted right by 0.25
+        StdDraw.line(0.5, 0.5, 0.75, 0); // Shifted right by 0.25
+        StdDraw.circle(0.18, 0.1, 0.1); // Shifted right by 0.25
+        StdDraw.circle(0.82, 0.1, 0.1); // Shifted right by 0.25
     }
-
     private static void teilB() {
         int n = 1000;
         int xMax = 1000;
@@ -172,6 +152,6 @@ public class TelNet {
     }
 
     public static void main(String[] args) {
-        teilB();
+        teilA();
     }
 }

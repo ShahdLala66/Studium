@@ -8,8 +8,10 @@ import sim.SYSimulation;
 import undirectedGraph.UndirectedGraph;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 // ...
 
@@ -25,10 +27,10 @@ public class ShortestPath<V> {
     SYSimulation sim = null;
     Map<V, Double> dist;            // Distanz für jeden Knoten
     Map<V, V> pred;                 // Vorgänger für jeden Knoten
-    IndexMinPQ<V, Double> cand;     // Kandidaten als PriorityQueue PQ
-    UndirectedGraph<V> graph;       // Der Graph
-    Heuristic<V> heur;              // Heuristik
-    private V targetNode;           // Zielknoten
+    IndexMinPQ<V, Double> cand;     // Kandidaten als PriorityQueue
+    UndirectedGraph<V> graph;
+    Heuristic<V> heur;
+    private V targetNode;
 
 
     /**
@@ -85,42 +87,39 @@ public class ShortestPath<V> {
         this.pred.clear();
         this.dist.clear();
         this.cand.clear();
-        targetNode = g; // Zielknoten speichern
-        for (V v : graph.getVertexSet()) {
+
+        for (V v : graph.getVertexSet()) {  // jeden Knoten erstmal auf unendlich setzen, quasi unbesucht
             dist.put(v, Double.POSITIVE_INFINITY);
             pred.put(v, null);
         }
-        dist.put(s, 0.0);
 
-        cand.add(s, 0.0 + (heur != null ? heur.estimatedCost(s, g) : 0.0));
-        this.targetNode = null;
+        dist.put(s, 0.0);   // Distanz Startknoten auf 0
+        cand.add(s, 0.0 + (heur != null ? heur.estimatedCost(s, g) : 0.0)); // knoten s mit seiner heur in PQ eintragen
 
-        while (!cand.isEmpty()) {
-            V v = cand.getMinKey(); // Knoten mit minimalem dist[v] + h(v, g)
+        while (!cand.isEmpty()) {   // solange es noch Kandidaten gibt
+            V v = cand.getMinKey(); // Knoten mit minimaler dist
             cand.removeMin();
+
             if (sim != null) sim.visitStation((Integer) v, Color.BLUE);
-
-
             System.out.println("Besuche Knoten " + v + " mit d =  " + dist.get(v));
 
-            if (v.equals(g)) {
+            if (v.equals(g)) {  // wenn v = zielknoten
                 this.targetNode = g;
                 return; // Zielknoten erreicht
             }
 
-            for (V w : graph.getNeighborSet(v)) {
+            for (V w : graph.getNeighborSet(v)) {   // jeder Nachbar von v
                 double newDist = dist.get(v) + graph.getWeight(v, w);
 
-                if (dist.get(w) == Double.POSITIVE_INFINITY) {
-                    // Knoten w noch nicht besucht
-                    pred.put(w, v);
-                    dist.put(w, newDist);
-                    cand.add(w, newDist + (heur != null ? heur.estimatedCost(w, g) : 0.0));
+                if (dist.get(w) == Double.POSITIVE_INFINITY) {  // wenn noch nich besucht
+                    pred.put(w, v);                             // v als Vorgänger von w
+                    dist.put(w, newDist);                       // distanz von w auf neue distanz setzen
+                    cand.add(w, newDist + (heur != null ? heur.estimatedCost(w, g) : 0.0)); // w mit neuer distanz und heuristik in PQ eintragen
                 } else if (newDist < dist.get(w)) {
                     // Kürzerer Weg gefunden
                     pred.put(w, v);
                     dist.put(w, newDist);
-                    cand.change(w, newDist + (heur != null ? heur.estimatedCost(w, g) : 0.0));
+                    cand.change(w, newDist + (heur != null ? heur.estimatedCost(w, g) : 0.0)); // neue dist und heur
                 }
             }
         }
@@ -139,9 +138,9 @@ public class ShortestPath<V> {
 
     public List<V> getShortestPath() {
         if (targetNode == null) throw new IllegalArgumentException();
-        List<V> path = new ArrayList<>();
+        List<V> path = new ArrayList<>();   // nodes für den kürzesten weg speichern
         V v = targetNode;
-        while (v != null) {
+        while (v != null) { // solange es noch vorgänger gibt nodes in path eintragen
             path.addFirst(v);
             v = pred.get(v);
         }
@@ -160,7 +159,6 @@ public class ShortestPath<V> {
         if (targetNode == null || !dist.containsKey(targetNode)) {
             throw new IllegalArgumentException("Kein kürzester Weg berechnet.");
         }
-
         return dist.get(targetNode); // Distanz des Zielknotens zurückgeben
     }
 }

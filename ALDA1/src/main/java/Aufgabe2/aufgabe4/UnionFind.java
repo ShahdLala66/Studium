@@ -1,33 +1,32 @@
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 public class UnionFind<T> {
 
-    private Map<T, T> parent;
-    private Map<T, Integer> rank;
+    private final HashMap<T, T> parent;
+    private final HashMap<T, Integer> rank;
     private int size;
 
-    public UnionFind(Set<T> elements) {
+    public UnionFind(Set<T> s) {
         parent = new HashMap<>();
         rank = new HashMap<>();
-        for (T element : elements) {
-            parent.put(element, element);
-            rank.put(element, 0);
+        for (T e : s) {
+            parent.put(e, e);
+            rank.put(e, 0);
         }
-        size = elements.size();
+        size = s.size();
     }
 
-    public T find(T element) {
-        if (!parent.get(element).equals(element)) {
-            parent.put(element, find(parent.get(element))); // Path compression
+    public T find(T e) {
+        if (!parent.get(e).equals(e)) {
+            parent.put(e, find(parent.get(e))); // Path compression
         }
-        return parent.get(element);
+        return parent.get(e);
     }
 
-    public void union(T element1, T element2) {
-        T root1 = find(element1);
-        T root2 = find(element2);
+    public void union(T s1, T s2) {
+        T root1 = find(s1);
+        T root2 = find(s2);
 
         if (root1.equals(root2)) {
             return;
@@ -52,8 +51,8 @@ public class UnionFind<T> {
     }
 
     public static void main(String[] args) {
-        Set<Integer> elements = Set.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
-        UnionFind<Integer> uf = new UnionFind<>(elements);
+        Set<Integer> s = Set.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+        UnionFind<Integer> uf = new UnionFind<>(s);
 
         System.out.println("Initial size: " + uf.size());
         uf.union(0, 1);
@@ -62,7 +61,7 @@ public class UnionFind<T> {
         System.out.println("Size after union(2, 3): " + uf.size());
         uf.union(0, 2);
         System.out.println("Size after union(0, 2): " + uf.size());
-        System.out.println("Find(3): " + uf.find(3));
+        System.out.println("Find(9): " + uf.find(9));
         System.out.println("Find(1): " + uf.find(1));
     }
 }

@@ -1,19 +1,9 @@
-import java.util.Objects;
-
-public class TelKnoten {
-    int x;
-    int y;
-
-    public TelKnoten(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
+public record TelKnoten(int x, int y) {
 
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof TelKnoten) {
-            if (this.x == ((TelKnoten) obj).x && this.y == ((TelKnoten) obj).y)
-                return true;
+            return this.x == ((TelKnoten) obj).x && this.y == ((TelKnoten) obj).y;
         }
         return false;
     }
@@ -23,12 +13,4 @@ public class TelKnoten {
         return ("x: " + this.x + " y: " + this.y);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(x, y);
-    }
-//    @Override
-//    public int hashCode() {
-//        return x * y * 31;
-//    }
 }

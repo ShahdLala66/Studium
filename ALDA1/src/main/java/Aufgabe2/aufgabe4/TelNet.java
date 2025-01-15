@@ -1,15 +1,13 @@
-import java.awt.*;
 import java.util.*;
-import java.util.List;
 
 public class TelNet {
-    private final int maxDistance; // Maximum allowed distance between nodes
-    private final Map<TelKnoten, Integer> nodeIds; // Maps nodes to their unique IDs
-    private int nextId; // Next available ID for nodes
-    private final List<TelVerbindung> minSpanningTree; // Stores the minimal spanning tree edges
+    private final int lbg;                  // Leistungsbegrenzungswert
+    private final Map<TelKnoten, Integer> nodeIds;
+    private int nextId;
+    private final List<TelVerbindung> minSpanningTree;
 
-    public TelNet(int maxDistance) {
-        this.maxDistance = maxDistance;
+    public TelNet(int lbg) {
+        this.lbg = lbg;
         this.nodeIds = new HashMap<>();
         this.nextId = 0;
         this.minSpanningTree = new ArrayList<>();
@@ -25,28 +23,24 @@ public class TelNet {
     }
 
     public boolean computeOptTelNet() {
-        // Create sets for UnionFind
         Set<Integer> nodes = new HashSet<>(nodeIds.values());
         UnionFind<Integer> unionFind = new UnionFind<>(nodes);
 
-        // Create priority queue for edges
         PriorityQueue<TelVerbindung> edges = new PriorityQueue<>(
                 Comparator.comparingInt(e -> e.c)
         );
 
-        // Add all valid edges to priority queue
         for (TelKnoten node1 : nodeIds.keySet()) {
             for (TelKnoten node2 : nodeIds.keySet()) {
                 if (node1 == node2) continue;
 
                 int cost = calculateDistance(node1, node2);
-                if (cost <= maxDistance) {
+                if (cost <= lbg) {
                     edges.add(new TelVerbindung(node1, node2, cost));
                 }
             }
         }
 
-        // Kruskal's algorithm
         minSpanningTree.clear();
         while (!edges.isEmpty() && minSpanningTree.size() < nodeIds.size() - 1) {
             TelVerbindung edge = edges.poll();
@@ -59,12 +53,11 @@ public class TelNet {
             }
         }
 
-        // Check if we found a valid spanning tree
         return unionFind.size() == 1;
     }
 
     private int calculateDistance(TelKnoten a, TelKnoten b) {
-        return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+        return Math.abs(a.x() - b.x()) + Math.abs(a.y() - b.y());
     }
 
     public void generateRandomTelNet(int n, int xMax, int yMax) {
@@ -82,32 +75,38 @@ public class TelNet {
         }
     }
 
-    public void drawOptTelNet(int xMax, int yMax) {
+    public void drawOptTelNet(int xMax, int yMax, boolean drawGrid) {
         StdDraw.setCanvasSize(512, 512);
-        StdDraw.setXscale(0, xMax + 1);
-        StdDraw.setYscale(0, yMax + 1);
+        StdDraw.setXscale(0, xMax);
+        StdDraw.setYscale(0, yMax);
 
-        // Draw grid
-        StdDraw.setPenColor(StdDraw.LIGHT_GRAY);
-        for (int i = 0; i <= xMax; i++) {
-            StdDraw.line(i, 0, i, yMax);
-        }
-        for (int i = 0; i <= yMax; i++) {
-            StdDraw.line(0, i, xMax, i);
-        }
-
-        // Draw edges
-        StdDraw.setPenColor(StdDraw.RED);
-        for (TelVerbindung edge : minSpanningTree) {
-            StdDraw.line(edge.anfang.x, edge.anfang.y, edge.ende.x, edge.ende.y);
+        if(drawGrid) {
+            StdDraw.setPenColor(StdDraw.LIGHT_GRAY);
+            for (int i = 0; i <= xMax; i++) {
+                StdDraw.line(i, 0, i, yMax);
+            }
+            for (int i = 0; i <= yMax; i++) {
+                StdDraw.line(0, i, xMax, i);
+            }
         }
 
-        // Draw nodes
         StdDraw.setPenColor(StdDraw.BLUE);
         for (TelKnoten node : nodeIds.keySet()) {
-            StdDraw.filledCircle(node.x, node.y, 0.3);
+            StdDraw.filledSquare(node.x() - 0.5, node.y() - 0.5, 0.5);
+            StdDraw.setPenColor(StdDraw.RED);
+
+            StdDraw.filledCircle(node.x() - 0.5, node.y() - 0.5, 0.1);
+            StdDraw.setPenColor(StdDraw.BLUE);
+
         }
 
+        StdDraw.setPenColor(StdDraw.RED);
+        for (TelVerbindung edge : minSpanningTree) {
+            TelKnoten start = edge.anfang;
+            TelKnoten end = edge.ende;
+            StdDraw.line(start.x() - 0.5, start.y() - 0.5, start.x() - 0.5, end.y() - 0.5);
+            StdDraw.line(start.x() - 0.5, end.y() - 0.5, end.x() - 0.5, end.y() - 0.5);
+        }
         StdDraw.show();
     }
 
@@ -125,39 +124,54 @@ public class TelNet {
         return nodeIds.size();
     }
 
-    public static void main(String[] args) {
+    private static void teilA() {
         TelNet telNet = new TelNet(7);
 
-        // Add the 7 nodes from the example image
-        // Node coordinates from grid:
-        telNet.addTelKnoten(1, 1); // Node at (2,1)
-        telNet.addTelKnoten(3, 1); // Node at (1,2)
-        telNet.addTelKnoten(4, 2); // Node at (3,2)
-        telNet.addTelKnoten(3, 4); // Node at (4,3)
-        telNet.addTelKnoten(2, 6); // Node at (6,5)
-        telNet.addTelKnoten(4, 7); // Node at (5,6)
-        telNet.addTelKnoten(7, 6); // Node at (7,6)
+        telNet.addTelKnoten(1, 1);
+        telNet.addTelKnoten(3, 1);
+        telNet.addTelKnoten(4, 2);
+        telNet.addTelKnoten(3, 4);
+        telNet.addTelKnoten(2, 6);
+        telNet.addTelKnoten(4, 7);
+        telNet.addTelKnoten(7, 6);
 
-        // Compute optimal network
         boolean success = telNet.computeOptTelNet();
 
-        // Print results
-        System.out.println("Network creation successful: " + success);
-        System.out.println("Number of nodes: " + telNet.size());
-        System.out.println("Total cost: " + telNet.getOptTelNetKosten());
+        System.out.println("Netzwerk erfolgreich erstellt: " + success);
+        System.out.println("Anzahl der Knoten: " + telNet.size());
+        System.out.println("Gesamtkosten: " + telNet.getOptTelNetKosten());
 
-        // Print all connections in the minimal spanning tree
-        System.out.println("\nConnections in minimal spanning tree:");
+        System.out.println("\nVerbindungen im minimalen Spannbaum:");
         for (TelVerbindung connection : telNet.getOptTelNet()) {
-            System.out.printf("(%d,%d) to (%d,%d) with cost %d%n",
-                    connection.anfang.x, connection.anfang.y,
-                    connection.ende.x, connection.ende.y,
+            System.out.printf("(%d,%d) zu (%d,%d) mit Kosten %d%n",
+                    connection.anfang.x(), connection.anfang.y(),
+                    connection.ende.x(), connection.ende.y(),
                     connection.c);
         }
 
-        // Draw the network
-        telNet.drawOptTelNet(7, 7);
+        telNet.drawOptTelNet(7, 7, true);
     }
 
+    private static void teilB() {
+        int n = 1000;
+        int xMax = 1000;
+        int yMax = 1000;
+        int lbg = 100;
 
+        TelNet telNet = new TelNet(lbg);
+
+        telNet.generateRandomTelNet(n, xMax, yMax);
+
+        boolean success = telNet.computeOptTelNet();
+
+        System.out.println("Netzwerk erfolgreich erstellt: " + success);
+        System.out.println("Anzahl der Knoten: " + telNet.size());
+        System.out.println("Gesamtkosten: " + telNet.getOptTelNetKosten());
+
+        telNet.drawOptTelNet(xMax, yMax, false);
+    }
+
+    public static void main(String[] args) {
+        teilB();
+    }
 }
